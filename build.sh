@@ -16,7 +16,11 @@ for BEAT in "${BEATS_ARRAY[@]}"
 do
     # build
     cd $GOPATH/src/github.com/elastic/beats/$BEAT
-    make
+    if [ "$BEAT" = "packetbeat" ]; then
+	CGO_ENABLED=1 CC=arm-linux-gnueabi-gcc make
+    else
+	make
+    fi
     cp $BEAT /build
 
     # package

@@ -7,6 +7,7 @@ FROM debian:buster-slim
 RUN apt update && apt install -y \
     golang \
     build-essential \
+    libpcap-dev \
     gcc-arm-linux-gnueabi \
     git \
     wget \
