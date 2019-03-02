@@ -1,4 +1,16 @@
 #!/bin/bash
+
+set -e
+
+if [ ! -x "/usr/local/go/bin/go" ]; then
+	echo Installing Go: $GO_VERSION
+	wget --no-verbose -O /go.tar.gz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz
+	tar -C /usr/local -xzf /go.tar.gz
+fi
+
+PATH="/usr/local/go/bin:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
+
 echo Target version: $BEATS_VERSION
 
 BRANCH=$(echo $BEATS_VERSION | awk -F \. {'print $1 "." $2'})
@@ -17,7 +29,7 @@ do
     # build
     cd $GOPATH/src/github.com/elastic/beats/$BEAT
     if [ "$BEAT" = "packetbeat" ]; then
-	CGO_ENABLED=1 CC=arm-linux-gnueabi-gcc make
+	CGO_ENABLED=1 CC=arm-linux-gnueabi-gcc CGO_LDFLAGS="-L/usr/lib/arm-linux-gnueabihf" make
     else
 	make
     fi

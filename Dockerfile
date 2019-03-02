@@ -4,16 +4,17 @@
 
 FROM debian:buster-slim
 
-RUN apt update && apt install -y \
-    golang \
+RUN dpkg --add-architecture armhf && \
+    apt update && apt install -y \
     build-essential \
-    libpcap-dev \
+    libpcap-dev:armhf \
     gcc-arm-linux-gnueabi \
     git \
     wget \
     python2 \
     && rm -rf /var/lib/apt/lists/*
 
+ENV GO_VERSION=1.11.5
 ENV GOPATH=/go
 ENV GOARCH=arm
 ENV GOARM=7
